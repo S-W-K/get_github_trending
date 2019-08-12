@@ -27,7 +27,7 @@ with open('Blog/source/trending/index.md','w') as f:
     f.write(front_matter)
     f.write('\n')
     f.write('> Scraped from [GitHub](https://github.com/trending?since=daily), auto-deployed with [Travis Ci](https://travis-ci.org/).')
-    f.write('\n')
+    f.write('\n\n')
 
     for n,u,i in zip(repo_names,repo_urls,repo_intros):
         term=str('%d. [%s](%s)\n%s')%(cnt,n,u,i)
