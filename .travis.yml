@@ -16,6 +16,7 @@ install:
 script:
 - git clone git@github.com:S-W-K/Blog.git
 - python get_github_trending.py
+- cd Blog
 - git add .
 - git commit -m 'update github trending'
 - git push
