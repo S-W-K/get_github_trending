@@ -22,7 +22,7 @@ repo_intros=[''.join(intro.xpath('./text()')) for intro in repo_intros]
 repo_intros=[intro.strip() for intro in repo_intros]
 
 cnt=1
-with open('source/trending/index.md','w') as f:
+with open('Blog/source/trending/index.md','w') as f:
     front_matter='---\ntitle: Trending\ncomments: false\nno_toc: true\n---\n'
     f.write(front_matter)
     f.write('\n')
