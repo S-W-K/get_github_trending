@@ -32,7 +32,8 @@ with open('Blog/source/trending/index.md','w') as f:
         repo_intros=[''.join(intro.xpath('./text()')) for intro in repo_intros]
         repo_intros=[intro.strip() for intro in repo_intros]
 
-        f.write('# %s\n'%dir_)
+        f.write('\n')
+        f.write('### %s\n'%dir_)
         cnt=1
         for n,u,i in zip(repo_names,repo_urls,repo_intros):
             term=str('%d. [%s](%s)\n%s')%(cnt,n,u,i)
