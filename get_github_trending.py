@@ -7,39 +7,41 @@ from fake_useragent import UserAgent
 
 urls=['https://github.com/trending/python?since=daily',
 'https://github.com/trending?since=daily']
-directories=['Language: Python','Language: Any']
-
+directories=['Python Projects','All Projects']
 
 with open('Blog/source/trending/index.md','w') as f:
     front_matter='---\ntitle: Trending\ncomments: false\n---\n'
     f.write(front_matter)
     f.write('\n')
     f.write('> Scraped from [GitHub](https://github.com/trending?since=daily), auto-deployed with [Travis Ci](https://travis-ci.org/).')
-    f.write('\n\n')
+    f.write('\n')
     for url,dir_ in zip(urls,directories):
         user_agent=UserAgent().random
 
         response=requests.get(url,headers={'User-Agent':user_agent})
         html=etree.HTML(response.text)
 
-        repo_names=html.xpath('/html/body/div[4]/main/div[3]/div/div[2]/article//h1/a')
-        repo_names=[''.join(name.xpath('./text()')).strip() for name in repo_names]
-
-        # urls
-        repo_dirs=html.xpath('/html/body/div[4]/main/div[3]/div/div[2]/article//h1/a/@href')
-        prefix='https://github.com'
-        repo_urls=[prefix+name for name in repo_dirs]
-
-        # introductions
-        repo_intros=html.xpath('/html/body/div[4]/main/div[3]/div/div[2]/article//p')
-        repo_intros=[''.join(intro.xpath('./text()')) for intro in repo_intros]
-        repo_intros=[intro.strip() for intro in repo_intros]
-
         f.write('\n')
         f.write('### %s\n'%dir_)
+        repo_infos=html.xpath('/html/body/div[4]/main/div[3]/div/div[2]/article')
         cnt=1
-        for n,u,i in zip(repo_names,repo_urls,repo_intros):
-            term=str('%d. [%s](%s)\n%s')%(cnt,n,u,i)
+        for info in repo_infos:
+            # names
+            name=info.xpath('.//h1/a/text()')
+            name=''.join(name).strip()
+
+            # urls
+            repo_url=info.xpath('.//h1/a/@href')[0]
+            prefix='https://github.com'
+            repo_url=prefix+repo_url
+
+            # description
+            description=info.xpath('.//p/text()')
+            description=''.join(description).strip()
+            if len(description)==0:
+                description='No description'
+
+            term=str('%d. [%s](%s)\n%s')%(cnt,name,repo_url,description)
             cnt+=1
             f.write(term)
             f.write('\n')
