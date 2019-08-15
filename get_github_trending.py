@@ -2,6 +2,7 @@
 # @Author: S_W_K 
 
 import requests
+from requests.adapters import HTTPAdapter
 from lxml import etree
 from fake_useragent import UserAgent
 
@@ -15,10 +16,14 @@ with open('Blog/source/trending/index.md','w') as f:
     f.write('\n')
     f.write('> Scraped from [GitHub](https://github.com/trending?since=daily), auto-deployed with [Travis Ci](https://travis-ci.org/).')
     f.write('\n')
+
+
+    s=requests.Session()
+    s.mount('https://',HTTPAdapter(max_retries=3))
     for url,dir_ in zip(urls,directories):
         user_agent=UserAgent().random
 
-        response=requests.get(url,headers={'User-Agent':user_agent})
+        response=s.get(url,headers={'User-Agent':user_agent},timeout=5)
         html=etree.HTML(response.text)
 
         f.write('\n')
