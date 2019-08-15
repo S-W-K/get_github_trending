@@ -3,6 +3,7 @@
 
 import requests
 from lxml import etree
+from fake_useragent import UserAgent
 
 urls=['https://github.com/trending/python?since=daily',
 'https://github.com/trending?since=daily']
@@ -16,7 +17,9 @@ with open('Blog/source/trending/index.md','w') as f:
     f.write('> Scraped from [GitHub](https://github.com/trending?since=daily), auto-deployed with [Travis Ci](https://travis-ci.org/).')
     f.write('\n\n')
     for url,dir_ in zip(urls,directories):
-        response=requests.get(url)
+        user_agent=UserAgent().random
+
+        response=requests.get(url,headers={'User-Agent':user_agent})
         html=etree.HTML(response.text)
 
         repo_names=html.xpath('/html/body/div[4]/main/div[3]/div/div[2]/article//h1/a')
