@@ -47,7 +47,8 @@ def scrape_medium():
         '//*[@id="root"]/div/div[3]/div/div/div[1]/div[2]/div/div[3]/div')[0]
     first_title = the_first.xpath('string(./h1/a)')
     first_url = the_first.xpath('./h1/a/@href')[0]
-    first_url = 'https://medium.com'+first_url
+    if first_url[:5]!='https':
+        first_url = 'https://medium.com'+first_url
     first_descrp = the_first.xpath('string(./div/p/a)').strip()
     article_titles.append(first_title)
     article_urls.append(first_url)
@@ -58,6 +59,8 @@ def scrape_medium():
     for r in the_rest:
         r_title = r.xpath('string(./h3/a)')
         r_url = r.xpath('./h3/a/@href')[0]
+        if r_url[:5]!='https':
+            r_url = 'https://medium.com'+r_url
         r_descrp = r.xpath('string(./div/p/a)').strip()
         article_titles.append(r_title)
         article_urls.append(r_url)
