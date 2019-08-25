@@ -16,8 +16,8 @@ install:
 - pip install fake-useragent
 script:
 - git clone git@github.com:S-W-K/Blog.git
-- python get_github_trending.py
+- python get_trending.py
 - cd Blog
 - git add .
-- git commit -m 'update github trending'
+- git commit -m 'update trending'
 - git push
