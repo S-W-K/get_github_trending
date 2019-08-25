@@ -7,19 +7,30 @@ from lxml import etree
 from fake_useragent import UserAgent
 
 
-session = requests.Session()
-session.mount('https://', HTTPAdapter(max_retries=3))
 UA = UserAgent()
 
+def retry_get_none(func):
+    def wrapper(*args, **kw):
+        infos = func(*args, **kw)
+        while len(infos) == 0:
+            infos = func(*args, **kw)
+        return infos
+    return wrapper
+
+
+@retry_get_none
+def get_infos(url, xpath):
+    with requests.Session() as session:
+        session.mount('https://', HTTPAdapter(max_retries=3))
+        response = session.get(
+            url, headers={'User-Agent': UA.random}, timeout=5)
+    html = etree.HTML(response.text)
+    infos = html.xpath(xpath)
+    return infos
 
 def scrape_github(since_when, language=''):
     url = 'https://github.com/trending/%s?since=%s' % (language, since_when)
-    user_agent = UA.random
-
-    response = session.get(url, headers={'User-Agent': user_agent}, timeout=5)
-    html = etree.HTML(response.text)
-
-    repo_infos = html.xpath('/html/body/div[4]/main/div[3]/div/div[2]/article')
+    repo_infos = get_infos(url,'/html/body/div[4]/main/div[3]/div/div[2]/article')
     for info in repo_infos:
         repo_name = info.xpath('string(.//h1/a)').strip()
 
@@ -36,15 +47,18 @@ def scrape_github(since_when, language=''):
 
 def scrape_medium():
     url = 'https://medium.com/topic/popular'
-    response = session.get(url, headers={'User-Agent': UA.random}, timeout=5)
-    html = etree.HTML(response.text)
+    with requests.Session() as session:
+        session.mount('https://', HTTPAdapter(max_retries=3))
+        response = session.get(url, headers={'User-Agent': UA.random}, timeout=5)
+    # html = etree.HTML(response.text)
 
     article_titles = []
     article_urls = []
     article_descriptions = []
 
-    the_first = html.xpath(
-        '//*[@id="root"]/div/div[3]/div/div/div[1]/div[2]/div/div[3]/div')[0]
+    the_first=get_infos(url,'//*[@id="root"]/div/div[3]/div/div/div[1]/div[2]/div/div[3]/div')[0]
+    # the_first = html.xpath(
+        # '//*[@id="root"]/div/div[3]/div/div/div[1]/div[2]/div/div[3]/div')[0]
     first_title = the_first.xpath('string(./h1/a)')
     first_url = the_first.xpath('./h1/a/@href')[0]
     if first_url[:5]!='https':
@@ -54,8 +68,7 @@ def scrape_medium():
     article_urls.append(first_url)
     article_descriptions.append(first_descrp)
 
-    the_rest = html.xpath(
-        '//*[@id="root"]/div/div[3]/div/div/div[1]/div[3]/div[1]//section/div/section/div[1]/div[1]/div[1]')
+    the_rest = get_infos(url,'//*[@id="root"]/div/div[3]/div/div/div[1]/div[3]/div[1]//section/div/section/div[1]/div[1]/div[1]')
     for r in the_rest:
         r_title = r.xpath('string(./h3/a)')
         r_url = r.xpath('./h3/a/@href')[0]
