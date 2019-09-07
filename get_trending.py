@@ -32,9 +32,8 @@ def scrape_github(since_when, language=''):
     url = 'https://github.com/trending/%s?since=%s' % (language, since_when)
     repo_infos = get_infos(url,'/html/body/div[4]/main/div[3]/div/div[2]/article')
     for info in repo_infos:
-        repo_name = info.xpath('string(.//h1/a)').strip()
-
         repo_url = info.xpath('.//h1/a/@href')[0]
+        repo_name= repo_url[1:]
         prefix = 'https://github.com'
         repo_url = prefix+repo_url
 
