@@ -27,8 +27,7 @@ jobs:
       - name: Run
         run: python get_trending.py
       - name: Go into blog
-        with:
-          path: ./Blog
+        run: cd ./Blog
       - name: git config name
         run: git config --global user.name 's-w-k'
       - name: git config email
