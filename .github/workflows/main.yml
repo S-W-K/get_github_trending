@@ -13,12 +13,11 @@ jobs:
     steps:
       - name: Checkout get_trending
         uses: actions/checkout@v2
-        with:
-          ssh-key: ${{ secrets.TRENDING_SCR }}
       - name: Checkout Blog
         uses: actions/checkout@v2
         with:
           repository: S-W-K/Blog
+          ssh-key: ${{ secrets.TRENDING_SCR }}
           path: ./Blog
       - name: Set up Python
         uses: actions/setup-python@v2
