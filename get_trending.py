@@ -99,7 +99,7 @@ def scrape_medium():
 
 
 if __name__ == '__main__':
-    with open('Blog/source/trending/index.md', 'w') as f:
+    with open('source/trending/index.md', 'w') as f:
         # front_matter and beginning
         front_matter = '---\ntitle: Trending\ncomments: false\nno_toc: true\n---\n'
         f.write(front_matter)
