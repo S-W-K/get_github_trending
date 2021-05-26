@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout get_trending
         uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.TRENDING_SCR }}
       - name: Checkout Blog
         uses: actions/checkout@v2
         with:
@@ -32,8 +34,6 @@ jobs:
       - name: git config email
         working-directory: ./Blog
         run: git config --global user.email 's979612095@gmail.com'
-      - name: Access right
-        run: bash ./give_access.sh
       - name: Git add
         working-directory: ./Blog
         run: git add .
