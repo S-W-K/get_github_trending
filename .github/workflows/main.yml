@@ -32,6 +32,8 @@ jobs:
       - name: git config email
         working-directory: ./Blog
         run: git config --global user.email 's979612095@gmail.com'
+      - name: Access right
+        run: bash ./give_access.sh
       - name: Git add
         working-directory: ./Blog
         run: git add .
@@ -40,9 +42,6 @@ jobs:
         run: git commit -m 'update trending'
       - name: Git push
         working-directory: ./Blog
-        env:
-          deploy_key: ${{ secrets.TRENDING_SCR }}
         run: git push
       - name: delete clone files
-        working-directory: ./
         run: rm -rf ./Blog
