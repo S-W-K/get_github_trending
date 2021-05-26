@@ -26,19 +26,21 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run
         run: python get_trending.py
-      - name: Go into blog
-        run: cd ./Blog
       - name: git config name
+        working-directory: ./Blog
         run: git config --global user.name 's-w-k'
       - name: git config email
+        working-directory: ./Blog
         run: git config --global user.email 's979612095@gmail.com'
       - name: Git add
+        working-directory: ./Blog
         run: git add .
       - name: Git commit message
+        working-directory: ./Blog
         run: git commit -m 'update trending'
       - name: Git push
+        working-directory: ./Blog
         run: git push
-      - name: back home
-        run: cd ../
       - name: delete clone files
+        working-directory: ./
         run: rm -rf ./Blog
