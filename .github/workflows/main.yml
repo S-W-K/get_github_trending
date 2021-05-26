@@ -15,18 +15,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.6
-      - name: oupt list
-        run: ls ./
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Run
-        run: python get_trending.p
       - name: Pushes to another repository
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: 'source'
+          source-directory: './source'
           destination-github-username: 'S-W-K'
           destination-repository-name: 'Blog'
           user-email: s979612095@gmail.com
