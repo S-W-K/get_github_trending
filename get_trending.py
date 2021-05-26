@@ -101,21 +101,16 @@ def scrape_medium():
 if __name__ == '__main__':
     with open('Blog/source/trending/index.md', 'w') as f:
         # front_matter and beginning
-        front_matter = '---\ntitle: Trending\ncomments: false\nno_toc: true\n---\n'
+        front_matter = '---\ntitle: Github Trending\ncomments: false\nno_toc: true\n---\n'
         f.write(front_matter)
         f.write('\n')
         f.write(
-            '> Scraped from [GitHub](https://github.com/trending), [Medium](https://medium.com/topic/popular)\n')
+            '> Scraped from [GitHub](https://github.com/trending)\n')
         f.write('Auto-deployed with [Travis Ci](https://travis-ci.org/)')
         f.write('\n\n')
 
         f.write('{% tabs TAB %}\n')
 
-        # ------------------ GitHub Tab ------------------------------------
-        f.write('<!-- tab GitHub -->\n')
-
-        # ---------- GitHub Subtab ---------------
-        f.write('{% subtabs GitHub Tab%}\n')
         # daily
         f.write('<!-- tab Daily -->\n')
         repo_infos = scrape_github('daily')
@@ -155,25 +150,5 @@ if __name__ == '__main__':
                 'The crawler crashed, please contact the administrator to modify.\n')
         f.write('<!-- endtab -->\n')
 
-        f.write('{% endsubtabs %}\n')
-        # ---------- <EOF> GitHub Subtab ---------------
-        f.write('<!-- endtab -->\n')
         # ------------------ <EOF> GitHub Tab ------------------------------------
-
-        # ------------------ Medium Tab ------------------------------------
-        f.write('<!-- tab Medium -->\n')
-
-        # if crawler can't get any info, print modify request
-        try:
-            titles, urls, descrps = scrape_medium()
-            for index, (title, url, descrp) in enumerate(zip(titles, urls, descrps)):
-                f.write('%d. [**%s**](%s)\n' % (index+1, title, url))
-                f.write('%s\n' % descrp)
-        except TypeError:
-            f.write(
-                'The crawler crashed, please contact the administrator to modify.\n')
-        f.write('<!-- endtab -->\n')
-        # ------------------ <EOF> Medium Tab ------------------------------------
-
         f.write('{% endtabs %}\n')
-        f.write('Hi')
