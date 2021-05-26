@@ -106,7 +106,7 @@ if __name__ == '__main__':
         f.write('\n')
         f.write(
             '> Scraped from [GitHub](https://github.com/trending)\n')
-        f.write('Auto-deployed with [Travis Ci](https://travis-ci.org/)')
+        f.write('Auto-deployed with [Github Action](https://docs.github.com/en/actions)')
         f.write('\n\n')
 
         f.write('{% tabs TAB %}\n')

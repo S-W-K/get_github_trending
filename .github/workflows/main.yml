@@ -42,5 +42,3 @@ jobs:
       - name: Git push
         working-directory: ./Blog
         run: git push
-      - name: delete clone files
-        run: rm -rf ./Blog
